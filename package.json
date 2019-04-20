@@ -1,0 +1,13 @@
+{
+  "name": "china-treasury",
+  "version": "0.0.1",
+  "dependencies": {
+    "ali-oss": "^6.1.0",
+    "alipay-sdk": "^3.0.4",
+    "log4js": "^4.0.0",
+    "moment": "^2.24.0",
+    "mongodb": "^3.1.13",
+    "q": "^1.5.1",
+    "request": "^2.88.0"
+  }
+}
