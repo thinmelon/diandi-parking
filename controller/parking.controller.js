@@ -97,6 +97,17 @@ function queryMerchant(appId, context) {
 }
 
 /**
+ * 查询已录入停车场（按创建时间进行排序，最新录入放在最前）
+ *
+ * @param appId
+ * @param context
+ * @returns {Promise.<TResult>|*}
+ */
+function queryParkings(appId, context) {
+    return __PARKING_DATABASE__.queryParkings({});
+}
+
+/**
  * 车辆入场信息同步
  *
  * @param request
@@ -277,6 +288,7 @@ function syncParkingExitInfo(request) {
 
 module.exports = {
     queryMerchant: queryMerchant,
+    queryParkings: queryParkings,
     syncParkingEnterInfo: syncParkingEnterInfo,
     syncParkingExitInfo: syncParkingExitInfo
 };
@@ -294,13 +306,13 @@ module.exports = {
 // }
 // console.log('============== END ================')
 
-__SERVICE_WECHAT_OFFICIAL_ACCOUNT__.getAccessToken()
-    .then(token => {
-        console.log(token);
-    })
-    .catch(err => {
-        console.error(err)
-    });
+// __SERVICE_WECHAT_OFFICIAL_ACCOUNT__.getAccessToken()
+//     .then(token => {
+//         console.log('DONE');
+//     })
+//     .catch(err => {
+//         console.error(err)
+//     });
 
 // queryMerchant('2019012263122350', {})
 //     .then(res => {

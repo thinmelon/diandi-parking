@@ -38,6 +38,47 @@ function constructParameter(request) {
 /*************************************************************************************************************/
 
 /**
+ * 查询已拓展的停车场列表
+ *
+ * @param request
+ * @returns {*|promise|C}
+ */
+function queryParkings(request) {
+    const deferred = Q.defer();
+
+    console.debug('====== queryParkings ======', request.parking_id);
+    //  构建参数
+    request.collectionName = 'parking';                                            //  collection: parking
+    const __PARAMETER__ = constructParameter(request);
+    if (request.parking_id) __PARAMETER__.find = {"_id": request.parking_id};
+    __PARAMETER__.findOptions = {
+        sort: {
+            _id: -1
+        }
+    };
+
+    __MONGO_BASIC__.setupConnection({
+        params: __PARAMETER__,
+        result: {}
+    })
+        .then(__MONGO_BASIC__.find)
+        .then(__MONGO_BASIC__.close)
+        .then(res => {
+            "use strict";
+            deferred.resolve({
+                code: __ERROR_CODE__.success,
+                data: res.result
+            })
+        })
+        .catch(err => {
+            "use strict";
+            deferred.reject(err)
+        });
+
+    return deferred.promise;
+}
+
+/**
  * 记录车辆入场信息
  *
  * @param request
@@ -225,6 +266,8 @@ function addExitRecord(request) {
 module.exports = {
     __PARKING_STATUS__: __PARKING_STATUS__,
     __PARKING_SCENE__: __PARKING_SCENE__,
+    queryParkings: queryParkings,
+
     addEnterRecord: addEnterRecord,
     checkParkingFee: checkParkingFee,
     addExitRecord: addExitRecord

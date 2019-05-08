@@ -46,13 +46,9 @@ function refreshAccessToken() {
                 if (token.hasOwnProperty('expires_in')) {
                     //  计算过期时间
                     token.expires_in = Date.now() + (token.expires_in - 600) * 1000;
-                    console.debug('AccessToken 将于以下时间后过期 ==> ' + __MOMENT__(new Date(token.expires_in)).format('YYYY-MM-DD HH:mm:ss'));
+                    console.debug('AccessToken 将于以下时间后过期 ==> ' + __MOMENT__(new Date(token.expires_in)).utcOffset(480).format('YYYY-MM-DD HH:mm:ss'));
                     //  写入json文件
-                    // console.debug(__FILE_SYSTEM__.readFileSync(__PATH__.join(__dirname, 'wechat.access_token.json')) + '');
-                    console.error('=========> 尝试写入');
-                    // __FILE_SYSTEM__.writeFileSync(__PATH__.join(__dirname, 'wechat.access_token.json'), JSON.stringify(token));
-                    __FILE_SYSTEM__.writeFileSync(__PATH__.join('/tmp', 'wechat.access_token.json'), JSON.stringify(token));
-                    console.debug(__FILE_SYSTEM__.readFileSync(__PATH__.join('/tmp', 'wechat.access_token.json')) + '');
+                    __FILE_SYSTEM__.writeFileSync(__PATH__.join(__dirname, 'wechat.access_token.json'), JSON.stringify(token));
                     deferred.resolve(token);
                 } else {
                     deferred.reject(rawData);
@@ -74,7 +70,6 @@ function getAccessToken() {
     let token;
     let tokenFilePath = __PATH__.join(__dirname, 'wechat.access_token.json');
 
-    console.debug('PATH: ', tokenFilePath);
     if (__FILE_SYSTEM__.existsSync(tokenFilePath)) {
         token = JSON.parse(__FILE_SYSTEM__.readFileSync(tokenFilePath));
         if (token.hasOwnProperty('expires_in') && token.hasOwnProperty('access_token')) {
